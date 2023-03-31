@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HTML VALIDATION</title>
+</head>
+<body>
+	<h1>HTML FORM VALIDATION</h1>
+
+
+	<div class="container">
+		<div class="formContainer">
+			<form name="frm" id="frm" action="/process" method="POST">
+
+				<label for="Name">Name</label>
+				<input type="text" name="Name" placeholder="" class="Name" Id="Name" />
+				<div>
+					<span class="error" style="display:none;"></span>
+				</div>
+
+				<label for="Email">Email</label>
+				<input type="text" name="Email" placeholder="" class="Email" Id="Email" />
+				<div>
+					<span class="error" style="display:none;"></span>
+				</div>
+
+				<label for="Contact">Contact</label>
+				<input type="text" name="Contact" placeholder="" class="Contact" Id="Contact" />
+				<div>
+					<span class="error" style="display:none;"></span>
+				</div>
+
+				<label for="Contact">Date Of Birth</label>
+				<input type="date" name="DateofBirth" placeholder="" class="DateofBirth" Id="DateofBirth" />
+				<div>
+					<span class="error" style="display:none;"></span>
+				</div>
+
+				<input type="submit" value="submit" id="submit" />
+
+			</form>
+
+
+			<div id="output"></div>
+		</div>
+
+	</div>
+
+	<script src="jquery.js"></script>
+	<script>
+		$(document).ready( () => {
+			$('#submit').click( (e) => {
+				e.preventDefault();
+				$.ajax({
+					type: 'POST',
+					url: '/process',
+					dataType: 'json',
+					data: $('#frm').serialize()
+				}).done( (data, status, res) => {
+					var htmlData = '';
+					var resData = res.responseJSON;
+					var flag = true;
+
+					$.each(resData, (key, value) => {
+						if(value == ''){
+							$(`#${key} + div > .error`).html(`${key} is required !!`);
+							$(`#${key} + div > .error`).show();
+							flag = false;
+						}
+						else{
+							htmlData += `${key} : ${value}<br>`;
+							$(`#${key} + div > .error`).hide();
+						}
+					});
+						if(flag){
+							$('#output').html(htmlData);
+						}
+						else{
+							$('#output').html('');
+						}
+
+				});
+
+			});
+		
+		});
+	</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
